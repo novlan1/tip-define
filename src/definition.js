@@ -39,6 +39,7 @@
   const iPath = lineText.match(reg)[1];
   const index = workDir.indexOf('/src');
   let nPath = path.resolve(workDir.slice(0, index), iPath);
+
   const postfixReg = /\.(js|ts|tsx|jsx|vue)$/;
 
   if (!postfixReg.test(nPath)) {
@@ -48,21 +49,16 @@
     const indexJSPath = path.resolve(nPath, 'index.js');
     const indexVuePath = path.resolve(nPath, 'index.vue');
     const indexTsPath = path.resolve(nPath, 'index.ts');
+
+    const checkList = [jsPath, vuePath, tsPath, indexJSPath, indexVuePath, indexTsPath];
     
-    if (fs.existsSync(jsPath)) {
-      nPath = jsPath;
-    } else if (fs.existsSync(vuePath)) {
-      nPath = vuePath;
-    } else if (fs.existsSync(tsPath)) {
-      nPath = tsPath;
-    } else if (fs.existsSync(indexJSPath)) {
-      nPath = indexJSPath;
-    } else if (fs.existsSync(indexVuePath)) {
-      nPath = indexVuePath;
-    } else if (fs.existsSync(indexTsPath)) {
-      nPath = indexTsPath;
+    for (const item of checkList) {
+      if (fs.existsSync(item)) {
+        nPath = item;
+        break;
+      }
     }
-    console.log('nPath',nPath);
+    if (!postfixReg.test(nPath)) { return; }
   }
   if (fs.existsSync(nPath)) {
     console.log('existsSync');
